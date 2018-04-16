@@ -39,6 +39,12 @@ for i in range(n, len(lst)):
 finalvectors = []
 
 for vector in vectors:
+	temp = []
 	for attribute in vector:
+		temp.append(attribute[-1])
 		print(str(attribute[0]) + ": " + str(attribute[-1]))
+	finalvectors.append(temp)
 	print("----------")
+
+for item in finalvectors:
+	print(item)
