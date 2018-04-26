@@ -57,31 +57,13 @@ for vector in vectors:
 
 #convert first columns as idenitfier of which class data belongs too
 #classes 
-#0 is less than -10 percent
-#1 is between -10 and -5 percent
-#2 is between -5 and -1 percent
-#3 is between -1 and 0 percent
-#4 is between 0 and 1 percent
-#5 is between 1 and 5 percent
-#6 is between 5 and 10  percent
-#7 is greater than 10 percent
+#0 is loss
+#1 is gain
 for v in finalvectors:
-	if (v[0]<-10):
+	if (v[0]<0):
 		v[0]=0
-	elif (v[0]<-5):
-		v[0]=1
-	elif (v[0]<-1):
-		v[0]=2
-	elif (v[0]<0):
-		v[0]=3
-	elif (v[0]<1):
-		v[0]=4
-	elif (v[0]<5):
-		v[0]=5
-	elif (v[0]<10):
-		v[0]=6
 	else:
-		v[0]=7
+		v[0]=1
 
 f = open("data","w")
 for v in finalvectors:
