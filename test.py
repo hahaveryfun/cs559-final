@@ -3,7 +3,9 @@ import json
 from datetime import datetime
 import collections
 
-url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSFT&apikey=FLFAVC3T1WTRQOFD'
+url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol='+\
+'MSFT'+\
+'&apikey=FLFAVC3T1WTRQOFD'
 # FLFAVC3T1WTRQOFD
 url = url+"&outputsize=full"
 
@@ -51,23 +53,22 @@ for vector in vectors:
 	for attribute in vector:
 		#grab stock percentage from each attribute
 		temp.append(attribute[-1])
-		print(str(attribute[0]) + ": " + str(attribute[-1]))
+		# print(str(attribute[0]) + ": " + str(attribute[-1]))
 	finalvectors.append(temp)
-	print("----------")
 
-#convert first columns as idenitfier of which class data belongs too
-#classes 
-#0 is loss
-#1 is gain
-for v in finalvectors:
-	if (v[0]<0):
-		v[0]=0
-	else:
-		v[0]=1
+# convert first columns as idenitfier of which class data belongs too
+# classes 
+# 0 is loss
+# 1 is gain
+# for v in finalvectors:
+# 	if (v[0]<0):
+# 		v[0]=0
+# 	else:
+# 		v[0]=1
 
-f = open("data","w")
+f = open("data","a")
 for v in finalvectors:
-	s=str(v[0])	
+	s=str(v[0])
 	for i in range(1,n):
 		s+=","		
 		s+=str(v[i])
@@ -75,5 +76,5 @@ for v in finalvectors:
 	f.write(s)
 		
 f.close()
-for item in finalvectors:
-	print(item)
+# for item in finalvectors:
+	# print(item)
