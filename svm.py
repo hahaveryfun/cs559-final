@@ -59,7 +59,6 @@ sol = solvers.qp(P,q,G,h,A,b)
 a = np.ravel(sol['x'])
 mean=np.mean(a)
 var= np.var(a)
-
 #Choose this threshold randomly dont know what I should change it too
 threshold = 1e-5
 #normalizing before applying threshold since a is a very large number
@@ -81,16 +80,16 @@ b/= len(a)
 
 #Weight vector
 #linear kernal
-w = np.zeros(n_features)
-for n in range(nsv):
-        w += a[n] * sv_y[n] * sv[n]
-y_predict = np.dot(X,w)
-#y_predict = np.zeros(len(X))
-#for i in range(len(X)):
-#        s = 0
-#        for ai, sv_yi, svi in zip(a, sv_y, sv):
-#                s += ai * sv_yi * kernal(X[i], svi)
-#                y_predict[i] = s
+#w = np.zeros(n_features)
+#for n in range(nsv):
+#        w += a[n] * sv_y[n] * sv[n]
+#y_predict = np.dot(X,w)
+y_predict = np.zeros(len(test_data))
+for i in range(len(test_data)):
+        s = 0
+        for ai, sv_yi, svi in zip(a, sv_y, sv):
+                s += ai * sv_yi * kernal(test_data[i,1:], svi)
+                y_predict[i] = s
 #Not our code
 
 prediction=np.sign(y_predict+b)
