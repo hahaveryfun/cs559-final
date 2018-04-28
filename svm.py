@@ -72,12 +72,19 @@ for n in range(nsv):
 b/= len(a)
 
 #Weight vector
-w = np.zeros(n_features)
-for n in range(nsv):
-        w += a[n] * sv_y[n] * sv[n]
+#linear kernal
+#w = np.zeros(n_features)
+#for n in range(nsv):
+#        w += a[n] * sv_y[n] * sv[n]
+y_predict = np.zeros(len(X))
+for i in range(len(X)):
+        s = 0
+        for ai, sv_yi, svi in zip(a, sv_y, sv):
+                s += ai * sv_yi * kernal(X[i], svi)
+                y_predict[i] = s
 #Not our code
 
-prediction=np.sign(np.dot(test_data[:,1:],w)+b)
+prediction=np.sign(y_predict+b)
 correct = 0
 wrong = 0
 for i in range(len(test_data)):
@@ -90,7 +97,7 @@ for i in range(len(test_data)):
                 wrong+=1
 
 print "wrong is " + str(wrong)
-print "accuary is " + (correct)/float(correct+wrong)
+print "accuary is " + str((correct)/float(correct+wrong))
         
 
 lin = svm.LinearSVC()
