@@ -25,6 +25,7 @@ train_data = data[0:len(data)/2,]
 test_data = data[len(data)/2:,]
 
 #SVM code
+# z tell if sample should belong above or bellow the line
 z=[]
 for d in train_data:
         #
@@ -37,6 +38,9 @@ X=train_data[:,1:]
 #not our Code
 n_samples, n_features = X.shape
 
+# without kernal
+#K=np.matmul(X,X.T)
+#with kernal
 # Gram matrix
 K = np.zeros((n_samples, n_samples))
 for i in range(n_samples):
@@ -52,11 +56,14 @@ A = matrix(z,tc='d')
 b = matrix(0.0)
 
 sol = solvers.qp(P,q,G,h,A,b)
-
 a = np.ravel(sol['x'])
+mean=np.mean(a)
+var= np.var(a)
+
 #Choose this threshold randomly dont know what I should change it too
-threshold = 800000
-sv_t= a > threshold
+threshold = 1e-5
+#normalizing before applying threshold since a is a very large number
+sv_t= ((a-mean)/var) > 1e-5
 ind = np.arange(len(a))[sv_t]
 a=a[sv_t]
 sv=X[sv_t]
@@ -65,23 +72,25 @@ sv_y=z.T[sv_t]
 nsv = len(a)
 #y intercept
 b=0.0
+temp2=a*sv_y
 for n in range(nsv):
         b+=sv_y[n]
         temp =K[ind[n],sv_t]
-        b-=np.sum(a*sv_y*temp)
+        b-=np.sum(temp2*temp)
 b/= len(a)
 
 #Weight vector
 #linear kernal
-#w = np.zeros(n_features)
-#for n in range(nsv):
-#        w += a[n] * sv_y[n] * sv[n]
-y_predict = np.zeros(len(X))
-for i in range(len(X)):
-        s = 0
-        for ai, sv_yi, svi in zip(a, sv_y, sv):
-                s += ai * sv_yi * kernal(X[i], svi)
-                y_predict[i] = s
+w = np.zeros(n_features)
+for n in range(nsv):
+        w += a[n] * sv_y[n] * sv[n]
+y_predict = np.dot(X,w)
+#y_predict = np.zeros(len(X))
+#for i in range(len(X)):
+#        s = 0
+#        for ai, sv_yi, svi in zip(a, sv_y, sv):
+#                s += ai * sv_yi * kernal(X[i], svi)
+#                y_predict[i] = s
 #Not our code
 
 prediction=np.sign(y_predict+b)
@@ -96,7 +105,7 @@ for i in range(len(test_data)):
         else:
                 wrong+=1
 
-print "wrong is " + str(wrong)
+#print "wrong is " + str(wrong)
 print "accuary is " + str((correct)/float(correct+wrong))
         
 
