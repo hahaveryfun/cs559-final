@@ -4,7 +4,12 @@ from sklearn.decomposition import PCA
 from cvxopt import matrix,solvers
 
 data = np.loadtxt('data', dtype=float, delimiter=',')
-
+for i in range(0,len(data)):
+        #classify data
+        if (data[i][0]<0):
+                data[i][0]=0
+        else:
+                data[i][0]=1
 #number of features
 n=10
 n_classes=2
