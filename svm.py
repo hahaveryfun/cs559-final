@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn import svm
 
-data = np.loadtxt('data', dtype=float, delimiter=',')
+data = np.loadtxt('msft', dtype=float, delimiter=',')
 
 n_classes=2
 spread = np.zeros(n_classes)

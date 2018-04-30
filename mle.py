@@ -134,9 +134,6 @@ def MLE(_trainingdata, _testingdata):
 				successfulpreds = successfulpreds + 1
 
 	return float(successfulpreds)/float(len(_testingdata))
-
-data = np.loadtxt('data', dtype=float, delimiter=',')
-
 # n_classes=8
 # spread = np.zeros(n_classes)
 # for i in range(0,len(data)):
@@ -148,11 +145,86 @@ data = np.loadtxt('data', dtype=float, delimiter=',')
 
 # data = np.random.permutation(data);
 
+data = np.loadtxt('msft', dtype=float, delimiter=',')
 print(len(data))
+print("Microsoft")
+s = 0.0
+for i in range(10):
+	data = np.loadtxt('msft', dtype=float, delimiter=',')
+	shuffle(data)
+	train_data = data[0:(int(len(data)/2))]
+	test_data = data[(int(len(data)/2)):]
+	try:
+		x = MLE(train_data.tolist(), test_data.tolist())
+	except Exception as e:
+		data = np.loadtxt('msft', dtype=float, delimiter=',')
+		shuffle(data)
+		train_data = data[0:(int(len(data)/2))]
+		test_data = data[(int(len(data)/2)):]
+		x = MLE(train_data.tolist(), test_data.tolist())
+	s = s + x
+	print(x)
+print("Mean: " + str(s/10.0))
 
-shuffle(data)
+data = np.loadtxt('aapl', dtype=float, delimiter=',')
+print(len(data))
+print("Apple")
+s = 0.0
+for i in range(10):
+	data = np.loadtxt('aapl', dtype=float, delimiter=',')
+	shuffle(data)
+	train_data = data[0:(int(len(data)/2))]
+	test_data = data[(int(len(data)/2)):]
+	try:
+		x = MLE(train_data.tolist(), test_data.tolist())
+	except Exception as e:
+		data = np.loadtxt('aapl', dtype=float, delimiter=',')
+		shuffle(data)
+		train_data = data[0:(int(len(data)/2))]
+		test_data = data[(int(len(data)/2)):]
+		x = MLE(train_data.tolist(), test_data.tolist())
+	s = s + x
+	print(x)
+print("Mean: " + str(s/10.0))
 
-train_data = data[0:(int(len(data)/2))]
-test_data = data[(int(len(data)/2)):]
+data = np.loadtxt('ibm', dtype=float, delimiter=',')
+print(len(data))
+print("IBM")
+s = 0.0
+for i in range(10):
+	data = np.loadtxt('ibm', dtype=float, delimiter=',')
+	shuffle(data)
+	train_data = data[0:(int(len(data)/2))]
+	test_data = data[(int(len(data)/2)):]
+	try:
+		x = MLE(train_data.tolist(), test_data.tolist())
+	except Exception as e:
+		data = np.loadtxt('ibm', dtype=float, delimiter=',')
+		shuffle(data)
+		train_data = data[0:(int(len(data)/2))]
+		test_data = data[(int(len(data)/2)):]
+		x = MLE(train_data.tolist(), test_data.tolist())
+	s = s + x
+	print(x)
+print("Mean: " + str(s/10.0))
 
-print(MLE(train_data.tolist(), test_data.tolist()))
+data = np.loadtxt('jpm', dtype=float, delimiter=',')
+print(len(data))
+print("JP Morgan Chase")
+s = 0.0
+for i in range(10):
+	data = np.loadtxt('jpm', dtype=float, delimiter=',')
+	shuffle(data)
+	train_data = data[0:(int(len(data)/2))]
+	test_data = data[(int(len(data)/2)):]
+	try:
+		x = MLE(train_data.tolist(), test_data.tolist())
+	except Exception as e:
+		data = np.loadtxt('jpm', dtype=float, delimiter=',')
+		shuffle(data)
+		train_data = data[0:(int(len(data)/2))]
+		test_data = data[(int(len(data)/2)):]
+		x = MLE(train_data.tolist(), test_data.tolist())
+	s = s + x
+	print(x)
+print("Mean: " + str(s/10.0))
