@@ -3,7 +3,7 @@ from sklearn import svm
 from sklearn.decomposition import PCA
 from cvxopt import matrix,solvers
 
-data = np.loadtxt('data', dtype=float, delimiter=',')
+data = np.loadtxt('msft', dtype=float, delimiter=',')
 for i in range(0,len(data)):
         #classify data
         if (data[i][0]<0):
@@ -18,7 +18,7 @@ for i in range(0,len(data)):
         spread[int(data[i][0])]+=1
 
 for i in range(0,n_classes):
-        print ("Class "+str(i)+" has "+str(spread[i]))
+        print("Class "+str(i)+" has "+str(spread[i]))
 
 data = np.random.permutation(data);
 
@@ -110,7 +110,7 @@ for i in range(len(test_data)):
                 wrong+=1
 
 #print "wrong is " + str(wrong)
-print "accuary is " + str((correct)/float(correct+wrong))
+print("accuracy is " + str((correct)/float(correct+wrong)))
         
 
 lin = svm.LinearSVC()
