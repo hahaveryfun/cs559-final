@@ -1,3 +1,4 @@
+# Start our code
 import numpy as np
 from sklearn import svm
 from sklearn.decomposition import PCA
@@ -51,19 +52,15 @@ for c in range(n_classes):
                         z.append(-1)
         z = np.ravel(np.array(z))
         X=train_data[:,1:]
-        #not our Code
         n_samples, n_features = X.shape
         
-        # without kernal
-        #K=np.matmul(X,X.T)
         #with kernal
-        print "creating gram matrix with kernal"
+        print "creating gram matrix with linear kernal"
         # Gram matrix
-        K = np.zeros((n_samples, n_samples))
-        for i in range(n_samples):
-                for j in range(n_samples):
-                        K[i,j] = kernal(X[i], X[j])
-                
+        #using linear kernal
+        K = np.matmul(X,X.T)
+        # End our code
+        # Start their code
         P = matrix(np.outer(z,z) * K)
         z=z[np.newaxis]
         q = matrix(-1*np.ones(n_samples))
@@ -76,9 +73,8 @@ for c in range(n_classes):
         sol = solvers.qp(P,q,G,h,A,b)
         print "Found support vectors for svm"
         a = np.ravel(sol['x'])
-        # <Start> Our code
-        #mean=np.mean(a)
-        #var= np.var(a)
+        # End their code
+        # Start Our code
         #Choose this threshold randomly dont know what I should change it too
         #Allow 20 support vectors
         #threshold = a[np.argsort(a)][n_samples-20-1]
@@ -94,31 +90,29 @@ for c in range(n_classes):
         sv_y=z.T[sv_t]
         
         nsv = len(a)
-        print "starting to calculate y intercept"
+        #print "starting to calculate y intercept"
         #y intercept
-        b=0.0
-        temp2=a*sv_y
-        for n in range(nsv):
-                b+=sv_y[n]
-                temp =K[ind[n],sv_t]
-                b-=np.sum(temp2*temp)
-        b/= len(a)
-        print "found y intercept"
+        #b=0.0
+        #temp2=a*sv_y
+        #for n in range(nsv):
+        #        b+=sv_y[n]
+        #        temp =K[ind[n],sv_t]
+        #        b-=np.sum(temp2*temp)
+        #b/= len(a)
+        #print "found y intercept"
         #Weight vector
         #linear kernal
-        #w = np.zeros(n_features)
-        #for n in range(nsv):
-        #        w += a[n] * sv_y[n] * sv[n]
-        #y_predict = np.dot(X,w)
         print "using svm to predict samples"
-        y_predict = np.zeros(len(test_data))
-        for i in range(len(test_data)):
-                s = 0
-                for ai, sv_yi, svi in zip(a, sv_y, sv):
-                        s += ai * sv_yi * kernal(test_data[i,1:], svi)
-                sign = np.sign(s+b)
-                predM[i][c] = 1 if (sign==1) else 0
-                #Not our code
+        # Start their code
+        w = np.zeros(n_features)
+        for n in range(nsv):
+                w += a[n] * sv_y[n] * sv[n]
+        y_predict = np.dot(X,w)
+        # End their code
+        # Start our code
+        b=-1*(np.amax(y_predict)+np.amin(y_predict))/2.
+        for j in range(len(y_predict)):
+                predM[j][i]=np.sign(y_predict[j]+b)
 correct = 0
 wrong = 0
 svmA = np.zeros(n_classes)
@@ -127,10 +121,10 @@ for i in range(len(test_data)):
         # assign to closest svm
         prediction=[]
         for j in range(len(predM[i])):
-                if (predM[i][j]>0 and test_data[i][0]==j):
+                if (predM[i][j]==1 and test_data[i][0]==j):
                         prediction.append(j)
                         svmA[j]+=1
-                elif (predM[i][j]==0 and test_data[i][0]!=j):
+                elif (predM[i][j]==-1 and test_data[i][0]!=j):
                         svmA[j]+=1
         if (len(prediction)!=1):
                 wrong+=1
@@ -149,7 +143,7 @@ for i in range(len(svmA)):
         a = svmA[i]/float(total)
         print "accuracy of svm for class "+str(i)+ " is " +str(a)
         
-
+# End our Code
 lin = svm.LinearSVC()
 
 lin.fit(train_data[:,1:],train_data[:,0:1])
