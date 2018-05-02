@@ -3,16 +3,28 @@ from sklearn import svm
 from sklearn.decomposition import PCA
 from cvxopt import matrix,solvers
 
-data = np.loadtxt('data', dtype=float, delimiter=',')
+data = np.loadtxt('msft', dtype=float, delimiter=',')
 for i in range(0,len(data)):
         #classify data
-        if (data[i][0]<0):
+        if (data[i][0]<-10):
                 data[i][0]=0
-        else:
+        elif (data[i][0]<-5):
                 data[i][0]=1
+	elif (data[i][0]<-1):
+		data[i][0]=2
+	elif (data[i][0]< 0):
+		data[i][0]=3
+	elif (data[i][0]>10):
+		data[i][0]=7
+	elif (data[i][0]>5):
+		data[i][0]=6
+	elif (data[i][0]>1):
+		data[i][0]=5
+	elif (data[i][0]>0):
+		data[i][0]=4
 #number of features
 n=10
-n_classes=2
+n_classes=8
 spread = np.zeros(n_classes)
 for i in range(0,len(data)):
         spread[int(data[i][0])]+=1
@@ -26,95 +38,114 @@ data = np.random.permutation(data);
 #since we are not actualy inside svm we need to calculate the individual parts of the kernal
 def kernal(x,y):
         return np.dot(x,y)
-train_data = data[0:len(data)/2,]
-test_data = data[len(data)/2:,]
+train_data = data[0:3*len(data)/4,]
+test_data = data[3*len(data)/4:,]
 
-#SVM code
-# z tell if sample should belong above or bellow the line
-z=[]
-for d in train_data:
-        #
-        if (d[0]==0):
-                z.append(-1)
-        else:
-                z.append(1)
-z = np.ravel(np.array(z))
-X=train_data[:,1:]
-#not our Code
-n_samples, n_features = X.shape
-
-# without kernal
-#K=np.matmul(X,X.T)
-#with kernal
-# Gram matrix
-K = np.zeros((n_samples, n_samples))
-for i in range(n_samples):
-        for j in range(n_samples):
-                K[i,j] = kernal(X[i], X[j])
+predM = np.zeros((len(test_data),n_classes))
+# make an svm for each class
+for c in range(n_classes):
+        print "Creating svm for class "+ str(c)
+        #SVM code
+        # z tell if sample should belong above or bellow the line
+        z=[]
+        for d in train_data:
+                if (d[0]==c):
+                        z.append(1)
+                else:
+                        z.append(-1)
+        z = np.ravel(np.array(z))
+        X=train_data[:,1:]
+        #not our Code
+        n_samples, n_features = X.shape
         
-P = matrix(np.outer(z,z) * K)
-z=z[np.newaxis]
-q = matrix(-1*np.ones(n_samples))
-G = matrix(-1*np.diag(np.ones(n_samples)))
-h = matrix(np.zeros(n_samples))
-A = matrix(z,tc='d')
-b = matrix(0.0)
+        # without kernal
+        #K=np.matmul(X,X.T)
+        #with kernal
+        print "creating gram matrix with kernal"
+        # Gram matrix
+        K = np.zeros((n_samples, n_samples))
+        for i in range(n_samples):
+                for j in range(n_samples):
+                        K[i,j] = kernal(X[i], X[j])
+                
+        P = matrix(np.outer(z,z) * K)
+        z=z[np.newaxis]
+        q = matrix(-1*np.ones(n_samples))
+        G = matrix(-1*np.diag(np.ones(n_samples)))
+        h = matrix(np.zeros(n_samples))
+        A = matrix(z,tc='d')
+        b = matrix(0.0)
 
-sol = solvers.qp(P,q,G,h,A,b)
-a = np.ravel(sol['x'])
-mean=np.mean(a)
-var= np.var(a)
-#Choose this threshold randomly dont know what I should change it too
-threshold = 1e-5
-#normalizing before applying threshold since a is a very large number
-sv_t= ((a-mean)/var) > 1e-5
-ind = np.arange(len(a))[sv_t]
-a=a[sv_t]
-sv=X[sv_t]
-sv_y=z.T[sv_t]
-
-nsv = len(a)
-#y intercept
-b=0.0
-temp2=a*sv_y
-for n in range(nsv):
-        b+=sv_y[n]
-        temp =K[ind[n],sv_t]
-        b-=np.sum(temp2*temp)
-b/= len(a)
-
-#Weight vector
-#linear kernal
-#w = np.zeros(n_features)
-#for n in range(nsv):
-#        w += a[n] * sv_y[n] * sv[n]
-#y_predict = np.dot(X,w)
-y_predict = np.zeros(len(test_data))
-for i in range(len(test_data)):
-        s = 0
-        for ai, sv_yi, svi in zip(a, sv_y, sv):
-                s += ai * sv_yi * kernal(test_data[i,1:], svi)
-                y_predict[i] = s
-#Not our code
-
-prediction=np.sign(y_predict+b)
+        print "Begining convex optimization"
+        sol = solvers.qp(P,q,G,h,A,b)
+        print "Found support vectors for svm"
+        a = np.ravel(sol['x'])
+        # <Start> Our code
+        #mean=np.mean(a)
+        #var= np.var(a)
+        #Choose this threshold randomly dont know what I should change it too
+        #Allow 20 support vectors
+        threshold = a[np.argsort(a)][n_samples-20-1]
+        #normalizing before applying threshold since a is a very large number
+        sv_t =a > threshold
+        #sv_t= ((a-mean)/var) > 1e-5
+        # <End> Our code
+        ind = np.arange(len(a))[sv_t]
+        a=a[sv_t]
+        sv=X[sv_t]
+        sv_y=z.T[sv_t]
+        
+        nsv = len(a)
+        print "starting to calculate y intercept"
+        #y intercept
+        b=0.0
+        temp2=a*sv_y
+        for n in range(nsv):
+                b+=sv_y[n]
+                temp =K[ind[n],sv_t]
+                b-=np.sum(temp2*temp)
+        b/= len(a)
+        print "found y intercept"
+        #Weight vector
+        #linear kernal
+        #w = np.zeros(n_features)
+        #for n in range(nsv):
+        #        w += a[n] * sv_y[n] * sv[n]
+        #y_predict = np.dot(X,w)
+        print "using svm to predict samples"
+        y_predict = np.zeros(len(test_data))
+        for i in range(len(test_data)):
+                s = 0
+                for ai, sv_yi, svi in zip(a, sv_y, sv):
+                        s += ai * sv_yi * kernal(test_data[i,1:], svi)
+                sign = np.sign(s+b)
+                predM[i][c] = 1/(s+b) if (sign==1) else 0
+                #Not our code
 correct = 0
 wrong = 0
+svmA = np.zeros(n_classes)
 for i in range(len(test_data)):
-        
-        if (prediction[i]==-1 and test_data[i][0]==0):
-                correct+=1
-        elif (prediction[i]==1 and test_data[i][0]==1):
+        # todo might be better to get weight vector and y intercept instead of prediction
+        # assign to closest svm
+        for j in range(len(predM[i])):
+                if (predM[i][j]>0 and test_data[i][0]==j):
+                        svmA[j]+=1
+                
+        prediction = np.argmax(predM[i])
+        if (test_data[i][0]==prediction):
                 correct+=1
         else:
                 wrong+=1
-
+                        
 #print "wrong is " + str(wrong)
-print "accuary is " + str((correct)/float(correct+wrong))
+total = correct+wrong
+print "accuary is " + str((correct)/float(total))
+for s in svmA:
+        a = s/float(total)
+        print "accuracy of svm for class "+str(s)+ " is " +str(a)
         
 
 lin = svm.LinearSVC()
-
 
 lin.fit(train_data[:,1:],train_data[:,0:1])
 

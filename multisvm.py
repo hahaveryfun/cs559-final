@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn import svm
 
-data = np.loadtxt('msft', dtype=float, delimiter=',')
+data = np.loadtxt('aapl', dtype=float, delimiter=',')
 
 n_classes=8
 
@@ -41,5 +41,15 @@ lin = svm.LinearSVC()
 
 lin.fit(train_data[:,1:],train_data[:,0:1])
 
+pred = lin.predict(test_data[:,1:])
+
+classM = np.zeros((n_classes,n_classes))
+
+for i in range(len(test_data)):
+        p = int(pred[i])
+        a = int(test_data[i,0])
+        classM[a][p]+=1
+
+print classM
 
 print(lin.score(test_data[:,1:],test_data[:,0:1]))
