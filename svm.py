@@ -92,13 +92,13 @@ for c in range(n_classes):
         nsv = len(a)
         #print "starting to calculate y intercept"
         #y intercept
-        #b=0.0
-        #temp2=a*sv_y
-        #for n in range(nsv):
-        #        b+=sv_y[n]
-        #        temp =K[ind[n],sv_t]
-        #        b-=np.sum(temp2*temp)
-        #b/= len(a)
+        b=0.0
+        temp2=a*sv_y
+        for n in range(nsv):
+                b+=sv_y[n]
+                temp =K[ind[n],sv_t]
+                b-=np.sum(temp2*temp)
+        b/= len(a)
         #print "found y intercept"
         #Weight vector
         #linear kernal
@@ -110,11 +110,12 @@ for c in range(n_classes):
         y_predict = np.dot(X,w)
         # End their code
         # Start our code
-        b=-1*(np.amax(y_predict)+np.amin(y_predict))/2.
+        #b=-1*(np.amax(y_predict)+np.amin(y_predict))/2.
         for j in range(len(y_predict)):
-                predM[j][i]=np.sign(y_predict[j]+b)
+                predM[j][c]=np.sign(y_predict[j]+b)
 correct = 0
 wrong = 0
+
 svmA = np.zeros(n_classes)
 for i in range(len(test_data)):
         # todo might be better to get weight vector and y intercept instead of prediction
