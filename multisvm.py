@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn import svm
 
-data = np.loadtxt('aapl', dtype=float, delimiter=',')
+data = np.loadtxt('msft', dtype=float, delimiter=',')
 
 n_classes=8
 
@@ -37,11 +37,12 @@ train_data = data[0:len(data)/2,]
 test_data = data[len(data)/2:,]
 
 
-lin = svm.LinearSVC()
-
+lin = svm.SVC(decision_function_shape="ovo")
+lin2 = svm.LinearSVC()
 lin.fit(train_data[:,1:],train_data[:,0:1])
-
 pred = lin.predict(test_data[:,1:])
+
+lin2.fit(train_data[:,1:],train_data[:,0:1])
 
 classM = np.zeros((n_classes,n_classes))
 
@@ -52,4 +53,8 @@ for i in range(len(test_data)):
 
 print classM
 
+print("one versus one")
 print(lin.score(test_data[:,1:],test_data[:,0:1]))
+print("one versus rest")
+print(lin2.score(test_data[:,1:],test_data[:,0:1]))
+print len(lin.support_)

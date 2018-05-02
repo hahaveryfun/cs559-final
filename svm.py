@@ -6,25 +6,21 @@ from cvxopt import matrix,solvers
 data = np.loadtxt('msft', dtype=float, delimiter=',')
 for i in range(0,len(data)):
         #classify data
-        if (data[i][0]<-10):
+        if (data[i][0]<-5):
                 data[i][0]=0
-        elif (data[i][0]<-5):
-                data[i][0]=1
-	elif (data[i][0]<-1):
+	elif (data[i][0]>-5 and data[i][0]<-1):
+		data[i][0]=1
+	elif (data[i][0]>-1 and data[i][0]< 0):
 		data[i][0]=2
-	elif (data[i][0]< 0):
+	elif (data[i][0]>0 and data[i][0]<1):
 		data[i][0]=3
-	elif (data[i][0]>10):
-		data[i][0]=7
-	elif (data[i][0]>5):
-		data[i][0]=6
-	elif (data[i][0]>1):
-		data[i][0]=5
-	elif (data[i][0]>0):
+	elif (data[i][0]>1 and data[i][0]<5):
 		data[i][0]=4
+	elif (data[i][0]>5):
+		data[i][0]=5
 #number of features
 n=10
-n_classes=8
+n_classes=6
 spread = np.zeros(n_classes)
 for i in range(0,len(data)):
         spread[int(data[i][0])]+=1
@@ -38,8 +34,8 @@ data = np.random.permutation(data);
 #since we are not actualy inside svm we need to calculate the individual parts of the kernal
 def kernal(x,y):
         return np.dot(x,y)
-train_data = data[0:3*len(data)/4,]
-test_data = data[3*len(data)/4:,]
+train_data = data[0:len(data)/2,]
+test_data = data[len(data)/2:,]
 
 predM = np.zeros((len(test_data),n_classes))
 # make an svm for each class
@@ -85,13 +81,15 @@ for c in range(n_classes):
         #var= np.var(a)
         #Choose this threshold randomly dont know what I should change it too
         #Allow 20 support vectors
-        threshold = a[np.argsort(a)][n_samples-20-1]
+        #threshold = a[np.argsort(a)][n_samples-20-1]
+        threshold = 1e-5
         #normalizing before applying threshold since a is a very large number
         sv_t =a > threshold
         #sv_t= ((a-mean)/var) > 1e-5
         # <End> Our code
         ind = np.arange(len(a))[sv_t]
         a=a[sv_t]
+        print "The amount of support vectors is "+str(len(a))
         sv=X[sv_t]
         sv_y=z.T[sv_t]
         
@@ -119,7 +117,7 @@ for c in range(n_classes):
                 for ai, sv_yi, svi in zip(a, sv_y, sv):
                         s += ai * sv_yi * kernal(test_data[i,1:], svi)
                 sign = np.sign(s+b)
-                predM[i][c] = 1/(s+b) if (sign==1) else 0
+                predM[i][c] = 1 if (sign==1) else 0
                 #Not our code
 correct = 0
 wrong = 0
@@ -127,11 +125,18 @@ svmA = np.zeros(n_classes)
 for i in range(len(test_data)):
         # todo might be better to get weight vector and y intercept instead of prediction
         # assign to closest svm
+        prediction=[]
         for j in range(len(predM[i])):
                 if (predM[i][j]>0 and test_data[i][0]==j):
+                        prediction.append(j)
                         svmA[j]+=1
-                
-        prediction = np.argmax(predM[i])
+                elif (predM[i][j]==0 and test_data[i][0]!=j):
+                        svmA[j]+=1
+        if (len(prediction)!=1):
+                wrong+=1
+                continue
+        prediction=prediction[0]
+        #prediction = np.argmax(predM[i])
         if (test_data[i][0]==prediction):
                 correct+=1
         else:
@@ -140,9 +145,9 @@ for i in range(len(test_data)):
 #print "wrong is " + str(wrong)
 total = correct+wrong
 print "accuary is " + str((correct)/float(total))
-for s in svmA:
-        a = s/float(total)
-        print "accuracy of svm for class "+str(s)+ " is " +str(a)
+for i in range(len(svmA)):
+        a = svmA[i]/float(total)
+        print "accuracy of svm for class "+str(i)+ " is " +str(a)
         
 
 lin = svm.LinearSVC()
