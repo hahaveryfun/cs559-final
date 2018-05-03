@@ -37,8 +37,8 @@ train_data = data[0:len(data)/2,]
 test_data = data[len(data)/2:,]
 
 
-lin = svm.SVC(decision_function_shape="ovo")
-lin2 = svm.LinearSVC()
+lin = svm.SVC(C=100)
+lin2 = svm.LinearSVC(C=100)
 lin.fit(train_data[:,1:],train_data[:,0:1])
 pred = lin.predict(test_data[:,1:])
 
