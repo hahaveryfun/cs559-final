@@ -2,7 +2,7 @@ import numpy as np
 from sklearn import svm
 
 def multisvm(_company):
-	data = np.loadtxt('jpm', dtype=float, delimiter=',')
+	data = np.loadtxt(_company, dtype=float, delimiter=',')
 
 	n_classes=8
 
@@ -36,7 +36,6 @@ def multisvm(_company):
 
 	train_data = data[0:len(data)/2,]
 	test_data = data[len(data)/2:,]
-
 
 	lin = svm.LinearSVC()
 
