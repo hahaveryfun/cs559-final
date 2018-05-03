@@ -1,10 +1,13 @@
+# Avikshith Pilly & William Dunkerley
+
+# START: OWN CODE
 import requests
 import json
 from datetime import datetime
 import collections
 
 url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol='+\
-'IBM'+\
+'JPM'+\
 '&apikey=FLFAVC3T1WTRQOFD'
 
 # FLFAVC3T1WTRQOFD
@@ -37,7 +40,7 @@ for i in range(1, len(lst)):
 	lst[i][-1] = 100.0*((float(lst[i][1]) - float(lst[i-1][1]))/float(lst[i-1][1]))
 
 # n defines how big we want to make our features
-n = 10
+n = 5
 vectors = []
 for i in range(n, len(lst)):
 	newvec = []
@@ -67,6 +70,7 @@ for vector in vectors:
 # 	else:
 # 		v[0]=1
 
+# Write data to file
 f = open("data","a")
 for v in finalvectors:
 	s=str(v[0])
@@ -77,5 +81,4 @@ for v in finalvectors:
 	f.write(s)
 		
 f.close()
-# for item in finalvectors:
-	# print(item)
+# END: OWN CODE
