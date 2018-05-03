@@ -161,9 +161,10 @@ def MLE(_trainingdata, _testingdata, _n):
 			if(item[0]>10):
 				successfulpreds = successfulpreds + 1
 
-	for row in loss:
-		print(row)
-	print("--------")
+	# Confusion matrix printout
+	# for row in loss:
+	# 	print(row)
+	# print("--------")
 	return float(successfulpreds)/float(len(_testingdata))
 
 def MLETrials(_trials, _companyfile):
@@ -188,13 +189,18 @@ def MLETrials(_trials, _companyfile):
 	print("Mean: " + str(s/float(_trials)))
 	print("Vari: " + str(numpy.var(lst)))
 
-MLETrials(10, '5msft')
-MLETrials(10, '5aapl')
-MLETrials(10, '5ibm')
-MLETrials(10, '5jpm')
-MLETrials(10, '10msft')
-MLETrials(10, '10aapl')
-MLETrials(10, '10ibm')
-MLETrials(10, '10jpm')
+# Set n to 5 or 10
+n = 5
+
+if n == 5:
+	MLETrials(10, '5msft')
+	MLETrials(10, '5aapl')
+	MLETrials(10, '5ibm')
+	MLETrials(10, '5jpm')
+elif n == 10:
+	MLETrials(10, '10msft')
+	MLETrials(10, '10aapl')
+	MLETrials(10, '10ibm')
+	MLETrials(10, '10jpm')
 
 #END: OWN CODE

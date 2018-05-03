@@ -8,7 +8,7 @@ Final Project repository for CS 559
 This is the file that we download the data from using alphago.
 
 #### Variables to change:
-In the data.py file you will find a variable called N. This is the variable that we use to determine the amount of features you want each sample to have.
+In the data.py file you will find a variable called n. This is the variable that we use to determine the amount of features you want each sample to have.
 
 Additionally, within the request URL for Alpha Vantage, you can place a different ticker for a different company to request other company data. 'msft' has been provided in the example
 
@@ -17,6 +17,10 @@ Creates a file called data. It is up to you to rename to correct file like aapl 
 
 
 ## mle.py
+
+#### Variables to change: 
+In the mle.py file, you will find a variable called n. This variable can be either 5 or 10. If 5, it will run MLE over the examples where there are 5 features. n = 10 will run MLE over the examples where there are 10 features.
+
 #### Description:
 The file that does the maximum liklihood estimation.
 
