@@ -1,4 +1,6 @@
-# Start our code
+# Avikshith Pilly & William Dunkerley
+
+# START OWN CODE
 import numpy as np
 from sklearn import svm
 from sklearn.decomposition import PCA
@@ -187,5 +189,4 @@ print "ibm mean= "+str(m3)+" var="+str(v3)
 m4=np.mean(s4)
 v4=np.var(s4)
 print "jpm mean= "+str(m4)+" var="+str(v4)
-# End our Code
-
+# END OWN CODE
