@@ -34,10 +34,8 @@ def getData(file):
         for i in range(0,n_classes):
                 print ("Class "+str(i)+" has "+str(spread[i]))
 
-        return np.random.permutation(data);
+        return np.random.permutation(data)
 
-#use kernal trick with kernal equal to (xy)^2
-#since we are not actualy inside svm we need to calculate the individual parts of the kernal
 def svmOVA(train_data,test_data):
         predM = np.zeros((len(test_data),n_classes))
         # make an svm for each class
@@ -55,7 +53,6 @@ def svmOVA(train_data,test_data):
                 X=train_data[:,1:]
                 n_samples, n_features = X.shape
                 
-                #with kernal
                 print "creating gram matrix with linear kernal"
                 # Gram matrix
                 #using linear kernal
@@ -92,7 +89,7 @@ def svmOVA(train_data,test_data):
                 
                 nsv = len(a)
                 #print "starting to calculate y intercept"
-                #y intercept
+                #y intercept is zero because that seems to be working best for our code
                 b=0.0
                 #temp2=a*sv_y
                 #for n in range(nsv):
@@ -149,32 +146,36 @@ def svmOVA(train_data,test_data):
 n=10
 
 data = getData('aapl')
-train_data=data[0:len(data)/2,]
-test_data=data[0:len(data)/2,]
 s1=[]
 for i in range(n):
+        train_data=data[0:len(data)/2,]
+        test_data=data[0:len(data)/2,]
         s1.append(svmOVA(train_data,test_data))
+        data=np.random.permutation(data)
 
 data = getData('msft')
-train_data=data[0:len(data)/2,]
-test_data=data[0:len(data)/2,]
 s2=[]
 for i in range(n):
+        train_data=data[0:len(data)/2,]
+        test_data=data[0:len(data)/2,]
         s2.append(svmOVA(train_data,test_data))
+        data=np.random.permutation(data)
 
 data = getData('ibm')
-train_data=data[0:len(data)/2,]
-test_data=data[0:len(data)/2,]
 s3=[]
 for i in range(n):
+        train_data=data[0:len(data)/2,]
+        test_data=data[0:len(data)/2,]
         s3.append(svmOVA(train_data,test_data))
+        data=np.random.permutation(data)
 
 data = getData('jpm')
-train_data=data[0:len(data)/2,]
-test_data=data[0:len(data)/2,]
 s4=[]
 for i in range(n):
+        train_data=data[0:len(data)/2,]
+        test_data=data[0:len(data)/2,]
         s4.append(svmOVA(train_data,test_data))
+        data=np.random.permutation(data)
 
 m1=np.mean(s1)
 v1=np.var(s1)
