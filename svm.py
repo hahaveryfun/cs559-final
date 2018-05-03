@@ -3,7 +3,6 @@ import numpy as np
 from sklearn import svm
 from sklearn.decomposition import PCA
 from cvxopt import matrix,solvers
-
 #number of features
 n=10
 n_classes=8
@@ -33,7 +32,7 @@ def getData(file):
                 
         for i in range(0,n_classes):
                 print ("Class "+str(i)+" has "+str(spread[i]))
-
+            
         return np.random.permutation(data)
 
 def svmOVA(train_data,test_data):
@@ -190,3 +189,4 @@ m4=np.mean(s4)
 v4=np.var(s4)
 print "jpm mean= "+str(m4)+" var="+str(v4)
 # End our Code
+
