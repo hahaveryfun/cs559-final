@@ -1,12 +1,20 @@
 # Avikshith Pilly & William Dunkerley
 
 # START OWN CODE
+import sys
 import numpy as np
 from sklearn import svm
 from sklearn.decomposition import PCA
 from cvxopt import matrix,solvers
 #number of features
-n=10
+if (len(sys.argv)<2):
+        print("usage: python svm.py <feature-amount>")
+        print("feature amount may be 5 or 10")
+        sys.exit()
+n=sys.argv[1]
+if (int(n)!=10 and int(n)!=5):
+        print("feature amount must either be 5 or 10 for our examples")
+        sys.exit()
 n_classes=8
 def getData(file):
         data = np.loadtxt(file, dtype=float, delimiter=',')
@@ -145,7 +153,7 @@ def svmOVA(train_data,test_data):
                 print "accuracy of svm for class "+str(i)+ " is " +str(a)
         return accuracy
 
-data = getData('aapl')
+data = getData(n+'aapl')
 s1=[]
 for i in range(10):
         train_data=data[0:len(data)/2,]
@@ -153,7 +161,7 @@ for i in range(10):
         s1.append(svmOVA(train_data,test_data))
         data=np.random.permutation(data)
 
-data = getData('msft')
+data = getData(n+'msft')
 s2=[]
 for i in range(10):
         train_data=data[0:len(data)/2,]
@@ -161,7 +169,7 @@ for i in range(10):
         s2.append(svmOVA(train_data,test_data))
         data=np.random.permutation(data)
 
-data = getData('ibm')
+data = getData(n+'ibm')
 s3=[]
 for i in range(10):
         train_data=data[0:len(data)/2,]
@@ -169,7 +177,7 @@ for i in range(10):
         s3.append(svmOVA(train_data,test_data))
         data=np.random.permutation(data)
 
-data = getData('jpm')
+data = getData(n+'jpm')
 s4=[]
 for i in range(10):
         train_data=data[0:len(data)/2,]
