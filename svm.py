@@ -142,11 +142,10 @@ def svmOVA(train_data,test_data):
                 a = svmA[i]/float(total)
                 print "accuracy of svm for class "+str(i)+ " is " +str(a)
         return accuracy
-n=5
 
 data = getData('aapl')
 s1=[]
-for i in range(n):
+for i in range(10):
         train_data=data[0:len(data)/2,]
         test_data=data[0:len(data)/2,]
         s1.append(svmOVA(train_data,test_data))
@@ -154,7 +153,7 @@ for i in range(n):
 
 data = getData('msft')
 s2=[]
-for i in range(n):
+for i in range(10):
         train_data=data[0:len(data)/2,]
         test_data=data[0:len(data)/2,]
         s2.append(svmOVA(train_data,test_data))
@@ -162,7 +161,7 @@ for i in range(n):
 
 data = getData('ibm')
 s3=[]
-for i in range(n):
+for i in range(10):
         train_data=data[0:len(data)/2,]
         test_data=data[0:len(data)/2,]
         s3.append(svmOVA(train_data,test_data))
@@ -170,7 +169,7 @@ for i in range(n):
 
 data = getData('jpm')
 s4=[]
-for i in range(n):
+for i in range(10):
         train_data=data[0:len(data)/2,]
         test_data=data[0:len(data)/2,]
         s4.append(svmOVA(train_data,test_data))
