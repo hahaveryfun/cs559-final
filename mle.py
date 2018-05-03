@@ -2,14 +2,10 @@
 
 # START: OWN CODE
 from random import shuffle
-import numpy
-from scipy.stats import multivariate_normal
-from scipy.spatial import KDTree
-import scipy.stats
-import statistics
-import math
 import numpy as np
-from sklearn import svm
+from scipy.stats import multivariate_normal
+import math
+
 
 def actualClass(_eodpercent):
 	if(_eodpercent<-10):
@@ -56,36 +52,36 @@ def MLE(_trainingdata, _testingdata, _n):
 		elif(entry[0]>10):
 			trainingdata7.append(entry[1:_n])
 
-	means = numpy.mean(trainingdata0, axis=0)
-	covs = numpy.cov(trainingdata0, y=None, rowvar=False)
+	means = np.mean(trainingdata0, axis=0)
+	covs = np.cov(trainingdata0, y=None, rowvar=False)
 	a = multivariate_normal(mean=means)
 
-	means = numpy.mean(trainingdata1, axis=0)
-	covs = numpy.cov(trainingdata1, y=None, rowvar=False)
+	means = np.mean(trainingdata1, axis=0)
+	covs = np.cov(trainingdata1, y=None, rowvar=False)
 	b = multivariate_normal(mean=means, cov=covs)
 
-	means = numpy.mean(trainingdata2, axis=0)
-	covs = numpy.cov(trainingdata2, y=None, rowvar=False)
+	means = np.mean(trainingdata2, axis=0)
+	covs = np.cov(trainingdata2, y=None, rowvar=False)
 	c = multivariate_normal(mean=means, cov=covs)
 
-	means = numpy.mean(trainingdata3, axis=0)
-	covs = numpy.cov(trainingdata3, y=None, rowvar=False)
+	means = np.mean(trainingdata3, axis=0)
+	covs = np.cov(trainingdata3, y=None, rowvar=False)
 	d = multivariate_normal(mean=means, cov=covs)
 
-	means = numpy.mean(trainingdata4, axis=0)
-	covs = numpy.cov(trainingdata4, y=None, rowvar=False)
+	means = np.mean(trainingdata4, axis=0)
+	covs = np.cov(trainingdata4, y=None, rowvar=False)
 	e = multivariate_normal(mean=means, cov=covs)
 
-	means = numpy.mean(trainingdata5, axis=0)
-	covs = numpy.cov(trainingdata5, y=None, rowvar=False)
+	means = np.mean(trainingdata5, axis=0)
+	covs = np.cov(trainingdata5, y=None, rowvar=False)
 	f = multivariate_normal(mean=means, cov=covs)
 
-	means = numpy.mean(trainingdata6, axis=0)
-	covs = numpy.cov(trainingdata6, y=None, rowvar=False)
+	means = np.mean(trainingdata6, axis=0)
+	covs = np.cov(trainingdata6, y=None, rowvar=False)
 	g = multivariate_normal(mean=means, cov=covs)
 
-	means = numpy.mean(trainingdata7, axis=0)
-	covs = numpy.cov(trainingdata7, y=None, rowvar=False)
+	means = np.mean(trainingdata7, axis=0)
+	covs = np.cov(trainingdata7, y=None, rowvar=False)
 	h = multivariate_normal(mean=means)
 
 	pa = float(len(trainingdata0)/float(len(_trainingdata)))
@@ -187,7 +183,7 @@ def MLETrials(_trials, _companyfile):
 		lst.append(x)
 	print(_companyfile)
 	print("Mean: " + str(s/float(_trials)))
-	print("Vari: " + str(numpy.var(lst)))
+	print("Vari: " + str(np.var(lst)))
 
 # Set n to 5 or 10
 n = 5

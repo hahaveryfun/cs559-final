@@ -34,8 +34,18 @@ The accuracy of MLE classification for each of the companies: Apple, Microsoft, 
 #### Description:
 The file that does the support vector machine classification.
 
+#### Usage:
+python svm.py <N>
+
+<N> can be either 5 or 10
+If 5, it will run SVM over the examples where there are 5 features.
+If 10, it will run SMV over the examples where there are 10 features.
+
 #### Requires:
-Needs these files: aapl,msft,ibm,jpm (All have been provided)
+Needs these files:
+5aapl,5msft,5ibm,5jpm (All have been provided)
+OR
+10aapl,10msft,10ibm,10jpm (All have been provided)
 
 #### Output:
 The accuracy of SVM classification for each of the companies: Apple, Microsoft, IBM and JP Morgan Chase
