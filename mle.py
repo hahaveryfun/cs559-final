@@ -4,8 +4,9 @@
 from random import shuffle
 import numpy as np
 from scipy.stats import multivariate_normal
+import statistics
 import math
-
+import sys
 
 def actualClass(_eodpercent):
 	if(_eodpercent<-10):
@@ -186,7 +187,14 @@ def MLETrials(_trials, _companyfile):
 	print("Vari: " + str(np.var(lst)))
 
 # Set n to 5 or 10
-n = 5
+if (len(sys.argv)<2):
+        print("usage: python mle.py <N>")
+        print("N may be 5 or 10")
+        sys.exit()
+n=int(sys.argv[1])
+if (n!=10 and n!=5):
+        print("N must either be 5 or 10 for our examples")
+        sys.exit()
 
 if n == 5:
 	MLETrials(10, '5msft')

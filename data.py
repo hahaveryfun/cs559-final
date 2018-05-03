@@ -5,6 +5,11 @@ import requests
 import json
 from datetime import datetime
 import collections
+import sys
+
+if (len(sys.argv)<2):
+        print("usage: python data.py <N>")
+        sys.exit()
 
 url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol='+\
 'JPM'+\
@@ -40,7 +45,8 @@ for i in range(1, len(lst)):
 	lst[i][-1] = 100.0*((float(lst[i][1]) - float(lst[i-1][1]))/float(lst[i-1][1]))
 
 # n defines how big we want to make our features
-n = 5
+n=int(sys.argv[1])
+
 vectors = []
 for i in range(n, len(lst)):
 	newvec = []

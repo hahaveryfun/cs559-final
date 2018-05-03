@@ -8,12 +8,12 @@ from sklearn.decomposition import PCA
 from cvxopt import matrix,solvers
 #number of features
 if (len(sys.argv)<2):
-        print("usage: python svm.py <feature-amount>")
-        print("feature amount may be 5 or 10")
+        print("usage: python svm.py <N>")
+        print("N may be 5 or 10")
         sys.exit()
 n=sys.argv[1]
 if (int(n)!=10 and int(n)!=5):
-        print("feature amount must either be 5 or 10 for our examples")
+        print("N must either be 5 or 10 for our examples")
         sys.exit()
 n_classes=8
 def getData(file):
